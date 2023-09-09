@@ -1,0 +1,23 @@
+[
+    {
+        "id": "7156abac-5575-49a4-a380-c53c85b249f7",
+        "products": []
+    },
+    {
+        "id": "c7426bd0-21ce-435c-b98a-e09bb0230bc1",
+        "products": []
+    },
+    {
+        "id": "46cbbc75-2e55-4bc4-9008-1af0991a35fe",
+        "products": []
+    },
+    {
+        "id": "cd42f103-2020-41da-ae19-cdd5b4423d38",
+        "products": [
+            {
+                "id": 1,
+                "quantity": 2
+            }
+        ]
+    }
+]

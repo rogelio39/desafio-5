@@ -1,0 +1,21 @@
+[
+    {
+        "id": "f3ae8d2d-75f0-43c3-b713-20cee51517c3"
+    },
+    {
+        "title": "pan integral",
+        "description": "pa integral",
+        "price": 1500,
+        "code": "ap101",
+        "status": true,
+        "id": "7ec77ca4-6c78-45c4-8522-12847227815e"
+    },
+    {
+        "title": "pan integral",
+        "description": "pa integral",
+        "price": 1500,
+        "code": "ap1201",
+        "status": true,
+        "id": "48dd8871-19f0-44d0-983f-d8ec29840b58"
+    }
+]
