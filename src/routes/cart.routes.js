@@ -9,8 +9,9 @@ const cart = new CartManager('./cart.json');
 
 cartRouter.post('/', async (req, res) => {
     try {
-        const newCart = await cart.createCart();
-        res.status(200).send(`Carrito creado con exito ${JSON.stringify(newCart, null)}`);
+        await cart.createCart();
+        const newCart = await cart.getProducts();
+        res.status(200).send(`Carrito creado con exito ${JSON.stringify(newCart, null, 4)}`);
     } catch (error) {
         res.status(500).send('error');
     }

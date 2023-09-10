@@ -8,7 +8,9 @@ import { ProductsManager } from "./controllers/productsManager.js";
 import { Products } from "./models/Products.js";
 
 const productManager = new ProductsManager();
-const productos = [];
+
+
+
 
 
 //rutas productos
@@ -51,8 +53,12 @@ app.use('/static', express.static(path.join(__dirname, '/public')));
 //server socket.io
 const io = new Server(server);
 //lado del servidor
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     console.log('servidor Socket.io connected');
+
+    const productos = await productManager.getProducts();
+    socket.emit('prods', productos);
+
 
     socket.on('datosUsuario', (user) => {
         if (user.rol === "admin") {
@@ -63,12 +69,14 @@ io.on('connection', (socket) => {
     })
 
     socket.on('nuevoProducto', async (nuevoProd) => {
-        // const {title, description, price, stock, code, category,  status, thumbnail} = nuevoProd;
-        // const newProduct = new Products(title, description, price, stock, code, category, status, thumbnail);
-        // productManager.addProduct(newProduct);
-        productos.push(nuevoProd);
-        socket.emit('prod', productos)
+        const {title, description, price, stock, code, category,  status, thumbnail} = nuevoProd;
+        const newProduct = new Products(title, description, price, stock, code, category, status, thumbnail);
+        productManager.addProduct(newProduct);
+        // const productos = productManager.getProducts();
+        socket.emit('prod', newProduct);
+        // socket.emit('prods', productos);
     })
+
     
 
 })
@@ -82,6 +90,7 @@ app.use('/api/products', prodsRouter);
 app.use('/api/carts', cartRouter);
 
 app.get('/static', async (req, res) => {
+    
     const productos = await productManager.getProducts();
 
     res.render('realTimeProducts', {
@@ -96,4 +105,3 @@ app.get('/static', async (req, res) => {
 app.post('/upload', upload.single('product'), (req, res) => {
     res.status(200).send('imagen cargada');
 })
-

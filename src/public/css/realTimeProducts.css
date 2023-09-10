@@ -39,3 +39,24 @@ input {
     width: 20%;
     cursor: pointer;
 }
+
+
+
+
+.products{
+    background-color: aliceblue;
+    border: black solid 1px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    padding: 0.8rem;
+    margin: 10px;
+}
+
+
+.off{
+    display: none;
+}
+
+.on{
+    background-color: azure;
+}

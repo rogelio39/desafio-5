@@ -1,3 +1,4 @@
+
 import { promises as fs } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -7,8 +8,6 @@ export class Cart {
         this.id = uuidv4();
         this.products = [];
     }
-
-
 
 }
 export class CartManager {
@@ -30,22 +29,17 @@ export class CartManager {
         }
     }
 
-
     async readProducts() {
         try {
             const data = JSON.parse(await fs.readFile(this.path, 'utf-8'));
             return data;
         } catch (error) {
-            if (error.code === 'ENOENT') {
-                // El archivo no existe, devolver un array vacío
+            if (error) {
+                console.log('error al leer el archivo. Metodo readProducts', error)
                 return [];
-            } else {
-                console.error('error al leer el archivo. Metodo readProducts', error);
-                throw error; // Re-lanza la excepción si es otro tipo de error
             }
         }
     }
-    
 
     async writeFile(data) {
         try {
@@ -72,7 +66,6 @@ export class CartManager {
             const cart = carts.find(cart => cart.id === cid);
             if (cart) {
                 const prodIndex = cart.products.findIndex(prod => prod.id === pid);
-                console.log(prodIndex);
                 if (prodIndex != -1) {
                     cart.products[prodIndex].quantity++;
                 } else {
@@ -95,5 +88,3 @@ export class CartManager {
         return products;
     }
 }
-
-

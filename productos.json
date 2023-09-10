@@ -1,21 +1,29 @@
 [
     {
-        "id": "f3ae8d2d-75f0-43c3-b713-20cee51517c3"
+        "title": "1",
+        "description": "1",
+        "price": "100",
+        "code": "110",
+        "status": "10p",
+        "stock": "1",
+        "id": "d03f0a11-433f-4896-8f35-9e4a4dd2b888"
     },
     {
-        "title": "pan integral",
-        "description": "pa integral",
-        "price": 1500,
-        "code": "ap101",
-        "status": true,
-        "id": "7ec77ca4-6c78-45c4-8522-12847227815e"
+        "title": "1",
+        "description": "1",
+        "price": "100",
+        "code": "1120",
+        "status": "10p",
+        "stock": "1",
+        "id": "df6c9786-6f71-4450-bb1a-414332eb3988"
     },
     {
-        "title": "pan integral",
-        "description": "pa integral",
-        "price": 1500,
-        "code": "ap1201",
-        "status": true,
-        "id": "48dd8871-19f0-44d0-983f-d8ec29840b58"
+        "title": "pan de molde",
+        "description": "pan con harina blanca",
+        "price": "100",
+        "code": "10",
+        "status": "121",
+        "stock": "panes",
+        "id": "c7042ebb-adba-4515-95da-20b2482b6250"
     }
 ]

@@ -36,6 +36,7 @@ prodsRouter.get('/', async (req, res) => {
 prodsRouter.get('/:id', async (req, res) => {
     try {
         const {id} = req.params;
+        console.log(id);
         const product = await productManager.getProductById(id);
 
         if (product) {
