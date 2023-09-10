@@ -1,29 +1,11 @@
 [
     {
-        "title": "1",
-        "description": "1",
-        "price": "100",
-        "code": "110",
-        "status": "10p",
-        "stock": "1",
-        "id": "d03f0a11-433f-4896-8f35-9e4a4dd2b888"
-    },
-    {
-        "title": "1",
-        "description": "1",
-        "price": "100",
-        "code": "1120",
-        "status": "10p",
-        "stock": "1",
-        "id": "df6c9786-6f71-4450-bb1a-414332eb3988"
-    },
-    {
-        "title": "pan de molde",
-        "description": "pan con harina blanca",
-        "price": "100",
-        "code": "10",
-        "status": "121",
+        "title": "tortilla",
+        "description": "tortilla",
+        "price": "1500",
+        "code": "15",
+        "status": "10arg",
         "stock": "panes",
-        "id": "c7042ebb-adba-4515-95da-20b2482b6250"
+        "id": "a651002e-5437-472d-8a9c-bea52a7c5280"
     }
 ]

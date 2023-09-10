@@ -69,12 +69,10 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('nuevoProducto', async (nuevoProd) => {
-        const {title, description, price, stock, code, category,  status, thumbnail} = nuevoProd;
-        const newProduct = new Products(title, description, price, stock, code, category, status, thumbnail);
+        const {title, description, price, code, stock, category} = nuevoProd;
+        const newProduct = new Products(title, description, price, code, true, stock, category, []);
         productManager.addProduct(newProduct);
-        // const productos = productManager.getProducts();
         socket.emit('prod', newProduct);
-        // socket.emit('prods', productos);
     })
 
     

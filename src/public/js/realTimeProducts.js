@@ -24,7 +24,6 @@ socket.on('prods', prods => {
 socket.on('prod', prod => {
     products.push(prod);
     renderProducts();
-    socket.emit('prods', products)
 }
 )
 
@@ -33,7 +32,6 @@ socket.on('prod', prod => {
 
 // Función para renderizar todos los productos en la sección de productos
 function renderProducts() {
-    const showProducts = document.getElementById('showProducts');
     let productsHTML = '';
 
     products.forEach(prod => {
