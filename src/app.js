@@ -1,16 +1,17 @@
 import express from "express";
 import multer from "multer";
+import { Server } from "socket.io";
+import mongoose from "mongoose";
+
+import path from 'path';
 import { __dirname } from "./path.js";
 import { engine } from "express-handlebars";
-import { Server } from "socket.io";
-import path from 'path';
+
+
 import { ProductsManager } from "./controllers/productsManager.js";
-import { Products } from "./models/Products.js";
+import { Products } from "./models/products.js";
 
 const productManager = new ProductsManager();
-
-
-
 
 
 //rutas productos
@@ -18,6 +19,8 @@ import prodsRouter from "./routes/products.routes.js";
 
 //rutas cart
 import cartRouter from "./routes/cart.routes.js";
+import userRouter from "./routes/users.routes.js";
+import productRouter from "./routes/products.models.routes.js";
 
 const PORT = 4000;
 
@@ -49,6 +52,12 @@ const upload = multer({ storage: storage });
 
 //aqui se deben concatenar las rutas.
 app.use('/static', express.static(path.join(__dirname, '/public')));
+
+//conectando mongoDB atlas con visual studio code.
+mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority').then(() => {
+    console.log('DB is connected')
+}).catch(() => console.log('error en conexion a DB'));
+
 
 //server socket.io
 const io = new Server(server);
@@ -83,9 +92,14 @@ io.on('connection', async (socket) => {
 //routes productos
 app.use('/api/products', prodsRouter);
 
-
 //routes cart
 app.use('/api/carts', cartRouter);
+
+//routes users 
+app.use('/api/users', userRouter);
+
+//routes products con mongo
+app.use('/api/prods', productRouter);
 
 app.get('/static', async (req, res) => {
     

@@ -1,13 +1,13 @@
 import {Router} from "express";
 import { ProductsManager } from "../controllers/productsManager.js";
-import { Products } from "../models/Products.js";
+import { Products } from "../models/products.js";
 
 
 const productManager = new ProductsManager();
 
 async function addProduct(prod) {
-    const { title, description, price, code, status, stock, thumbnail } = prod;
-    const newProduct = new Products(title, description, price, code, status, stock, thumbnail);
+    const { title, description, price, code, stock, category } = prod;
+    const newProduct = new Products(title, description, price, code, true, stock, category, []);
     await productManager.addProduct(newProduct);
     return newProduct;
 }
