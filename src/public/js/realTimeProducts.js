@@ -27,9 +27,6 @@ socket.on('prod', prod => {
 }
 )
 
-
-
-
 // Función para renderizar todos los productos en la sección de productos
 function renderProducts() {
     let productsHTML = '';
