@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { cartModel } from "../models/carts.models";
-import cartRouter from "./cart.routes";
 import { productModel } from "../models/products.models";
 
 const cartModelsRouter = Router();
@@ -9,7 +8,7 @@ const cartModelsRouter = Router();
 
 cartModelsRouter.get('/:cid', async (req, res) => {
     try {
-        const { id } = req.params;
+        const { cid } = req.params;
         const cart = await cartModel.findById(cid)
         if (cart) {
             res.status(200).send({ respuesta: 'ok', mensaje: cart });
@@ -66,4 +65,4 @@ cartModelsRouter.post('/:cid/product/:pid', async (req, res) => {
 })
 
 
-export default cartRouter;
+export default cartModelsRouter;

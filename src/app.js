@@ -14,6 +14,9 @@ import { Products } from "./models/products.js";
 const productManager = new ProductsManager();
 
 
+import { messageModel } from "./models/messages.models.js";
+
+
 //rutas productos
 import prodsRouter from "./routes/products.routes.js";
 
@@ -25,6 +28,8 @@ import productRouter from "./routes/products.models.routes.js";
 const PORT = 4000;
 
 const app = express();
+
+let userEmail;
 
 //config multer
 const storage = multer.diskStorage({
@@ -54,7 +59,7 @@ const upload = multer({ storage: storage });
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
 //conectando mongoDB atlas con visual studio code.
-mongoose.connect('mongodb+srv://andresrogesu:ejemplo@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority').then(() => {
+mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority').then(() => {
     console.log('DB is connected')
 }).catch(() => console.log('error en conexion a DB'));
 
@@ -68,23 +73,26 @@ io.on('connection', async (socket) => {
     const productos = await productManager.getProducts();
     socket.emit('prods', productos);
 
-
-    socket.on('datosUsuario', (user) => {
-        if (user.rol === "admin") {
-            socket.emit('credencialesConexion', 'usuario valido')
-        } else {
-            socket.emit('credencialesConexion', 'usuario no valido')
-        }
-    })
-
     socket.on('nuevoProducto', async (nuevoProd) => {
-        const {title, description, price, code, stock, category} = nuevoProd;
+        const { title, description, price, code, stock, category } = nuevoProd;
         const newProduct = new Products(title, description, price, code, true, stock, category, []);
         productManager.addProduct(newProduct);
         socket.emit('prod', newProduct);
+    });
+
+    socket.on('message', async (messageInfo) => {
+        const { email, message } = messageInfo;
+        try {
+            await messageModel.create({ email, message });
+            const messages = await messageModel.find();
+            userEmail = messages.email;
+            socket.emit('messages', messages);
+        } catch (error) {
+            console.log('error', error);
+        }
     })
 
-    
+
 
 })
 
@@ -102,14 +110,12 @@ app.use('/api/users', userRouter);
 app.use('/api/prods', productRouter);
 
 app.get('/static', async (req, res) => {
-    
-    const productos = await productManager.getProducts();
 
-    res.render('realTimeProducts', {
-        css: "realTimeProducts.css",
-        title: "Products",
-        prods : productos,
-        js : 'realTimeProducts.js'
+    res.render('chat', {
+        css: "chat.css",
+        title: "chat",
+        js: 'main.js',
+        user: userEmail
     })
 })
 

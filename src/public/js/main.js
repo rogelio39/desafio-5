@@ -1,43 +1,61 @@
-
-
-//lado del cliente
 const socket = io();
 
-const title = document.getElementById('title');
-const prodContainer = document.getElementById('productsContainer');
-const products = document.getElementById('products');
+const chatButton = document.getElementById('chatButton');
+const messageParagraph = document.getElementById('messageParagraph');
+const inputValue = document.getElementById('chatBox');
+const emailButton = document.getElementById('email');
+const form = document.getElementById('form');
+
+let user;
+let email;
 
 
-let user = {
-    rol : "admin"
-}
 
 Swal.fire({
-    title: 'Identificacion de usuario',
-    text: 'Por favor ingrese su nombre de usuario',
-    input: 'text',
+    title: "Identificación de usuario",
+    text: "Por favor, ingrese su correo electrónico",
+    input: "text",
     inputValidator: (valor) => {
-        return !valor && 'Ingrese su nombre de usuario';
-    },
-    //esto es para que no pueda evitar el mensaje. Aparece la alerta y no puede evitarlo
-    allowOutsideClick: false
-}).then(resultado => {
-    user.name = resultado.value;
-    socket.emit('datosUsuario', user);
+        // Expresión para corroborar si es un email
+        const emailRegex = /^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$/;
 
-    socket.on('credencialesConexion', (info) => {
-        if(info == 'usuario valido'){
-            title.innerHTML = `Bienvenido : ${user.name}`;
-        } else {
-            title.innerHTML = `${info}`;
+        if (!valor) {
+            return "Ingrese un correo electrónico válido";
+        } else if (!emailRegex.test(valor)) {
+            return "Ingrese una dirección de correo electrónico válida (ejemplo@email)";
         }
-    });
 
-    socket.emit('autorizacionProductos', user.rol);
+        return null; // La validación es exitosa
+    },
+    allowOutsideClick: false
+}).then((resultado) => {
+    if (resultado.isConfirmed) {
+        email = resultado.value;
+        console.log(email);
+    }
+});
+
+
+
+
+chatButton.addEventListener('click', () => {
+    // let actualDate = new Date().toLocaleString();
+
+    const message = inputValue.value;
+    if(message.trim().length > 0){
+        socket.emit('message', {email: email,  message: message})
+        inputValue.value = '';
+    }
+
+});
+
+
+socket.on('messages', (messages) => {
+    messageParagraph.innerHTML = '';
+    console.log(messages)
+    messages.forEach(message => {
+        messageParagraph.innerHTML += `<p>${message.email} escribio: ${message.message}. ${message.postTime}</p>`;
+    })
 })
-
-
-
-
 
 
