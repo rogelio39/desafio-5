@@ -24,12 +24,21 @@ import prodsRouter from "./routes/products.routes.js";
 import cartRouter from "./routes/cart.routes.js";
 import userRouter from "./routes/users.routes.js";
 import productRouter from "./routes/products.models.routes.js";
+import cartModelsRouter from "./routes/cart.models.routes.js";
+
+import { userModel } from "./models/users.models.js";
 
 const PORT = 4000;
 
 const app = express();
 
+//VARIABLES GLOBALES
+
+//variable para enviar userEmail por socket.
 let userEmail;
+
+//variable para almacenar los mensajes y poder mostrarlos apenas la pagian se carga
+let messagesView;
 
 //config multer
 const storage = multer.diskStorage({
@@ -59,8 +68,11 @@ const upload = multer({ storage: storage });
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
 //conectando mongoDB atlas con visual studio code.
-mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority').then(() => {
-    console.log('DB is connected')
+mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority')
+.then( async () => {
+    console.log('DB is connected');
+    // // const resultado = await userModel.find({surname: 'Middleton'}).explain('executionStats'); 
+    // console.log(resultado);
 }).catch(() => console.log('error en conexion a DB'));
 
 
@@ -70,16 +82,19 @@ const io = new Server(server);
 io.on('connection', async (socket) => {
     console.log('servidor Socket.io connected');
 
+    //se consulta los productos existentes
     const productos = await productManager.getProducts();
     socket.emit('prods', productos);
 
-    socket.on('nuevoProducto', async (nuevoProd) => {
-        const { title, description, price, code, stock, category } = nuevoProd;
-        const newProduct = new Products(title, description, price, code, true, stock, category, []);
-        productManager.addProduct(newProduct);
-        socket.emit('prod', newProduct);
-    });
+    // Consulta los mensajes existentes en la base de datos
+    try {
+        const messagesView = await messageModel.find();
+        socket.emit('messagesView', messagesView);
+    } catch (error) {
+        console.log('Error al consultar mensajes:', error);
+    }
 
+    
     socket.on('message', async (messageInfo) => {
         const { email, message } = messageInfo;
         try {
@@ -92,8 +107,12 @@ io.on('connection', async (socket) => {
         }
     })
 
-
-
+    socket.on('nuevoProducto', async (nuevoProd) => {
+        const { title, description, price, code, stock, category } = nuevoProd;
+        const newProduct = new Products(title, description, price, code, true, stock, category, []);
+        productManager.addProduct(newProduct);
+        socket.emit('prod', newProduct);
+    });
 })
 
 
@@ -109,15 +128,23 @@ app.use('/api/users', userRouter);
 //routes products con mongo
 app.use('/api/prods', productRouter);
 
+//routes carts con mongo
+app.use('/api/cartsModels', cartModelsRouter);
+
+
 app.get('/static', async (req, res) => {
+
+    const messages = JSON.stringify(await messageModel.find(), null, 4);
 
     res.render('chat', {
         css: "chat.css",
         title: "chat",
         js: 'main.js',
-        user: userEmail
+        user: userEmail,
+        messagesView: messages
     })
 })
+
 
 //este es el endpoint en el que me voy a conectar a mi aplicacion
 app.post('/upload', upload.single('product'), (req, res) => {

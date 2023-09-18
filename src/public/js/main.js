@@ -3,8 +3,7 @@ const socket = io();
 const chatButton = document.getElementById('chatButton');
 const messageParagraph = document.getElementById('messageParagraph');
 const inputValue = document.getElementById('chatBox');
-const emailButton = document.getElementById('email');
-const form = document.getElementById('form');
+
 
 let user;
 let email;
@@ -31,15 +30,14 @@ Swal.fire({
 }).then((resultado) => {
     if (resultado.isConfirmed) {
         email = resultado.value;
-        console.log(email);
     }
 });
 
 
 
 
+
 chatButton.addEventListener('click', () => {
-    // let actualDate = new Date().toLocaleString();
 
     const message = inputValue.value;
     if(message.trim().length > 0){
@@ -49,10 +47,15 @@ chatButton.addEventListener('click', () => {
 
 });
 
+socket.on('messagesView', (messagesView) => {
+    messageParagraph.innerHTML = '';
+    messagesView.forEach(message => {
+        messageParagraph.innerHTML += `<p>${message.email} escribio: ${message.message}. ${message.postTime}</p>`;
+    })
+})
 
 socket.on('messages', (messages) => {
     messageParagraph.innerHTML = '';
-    console.log(messages)
     messages.forEach(message => {
         messageParagraph.innerHTML += `<p>${message.email} escribio: ${message.message}. ${message.postTime}</p>`;
     })

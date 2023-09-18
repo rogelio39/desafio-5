@@ -8,6 +8,9 @@
 
 <div class="chatContainer">
     <div class="messageContainer">
+        {{#each messagesView}}
+        <p>{{this.email}}{{this.message}}{{this.postTime}}</p>
+        {{/each}}
         <p id="messageParagraph"></p>
     </div>
 </div>

@@ -21,7 +21,8 @@ const productSchema = new Schema({
     },
     category : {
         type: String,
-        required: true
+        required: true,
+        index : true
     },
     status : {
         type: Boolean,
