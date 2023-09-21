@@ -27,6 +27,7 @@ import productRouter from "./routes/products.models.routes.js";
 import cartModelsRouter from "./routes/cart.models.routes.js";
 
 import { userModel } from "./models/users.models.js";
+import { cartModel } from "./models/carts.models.js";
 
 const PORT = 4000;
 
@@ -68,11 +69,13 @@ const upload = multer({ storage: storage });
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
 //conectando mongoDB atlas con visual studio code.
-mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://andresrogesu:@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority')
 .then( async () => {
     console.log('DB is connected');
-    // // const resultado = await userModel.find({surname: 'Middleton'}).explain('executionStats'); 
-    // console.log(resultado);
+    const resultado =  JSON.stringify(await cartModel.findOne({_id: '65089ce9c3158615e0f2fffc'}), null, 4);//indico en donde existe la referencia y como devuelve un objeto, lo convierto a cadena json.
+
+
+    console.log(resultado);
 }).catch(() => console.log('error en conexion a DB'));
 
 
