@@ -29,6 +29,5 @@ cartSchema.pre('findOne', function() {
 })
 
 
-
-
 export const cartModel = model('carts', cartSchema)
+

@@ -13,7 +13,7 @@ const messagesSchema = new Schema({
     },
     postTime :  {
         type : Date,
-        default: Date.now()
+        default: Date.now
     }
 })
 

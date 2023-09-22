@@ -1,4 +1,6 @@
 import {Schema, model} from 'mongoose';
+import paginate from 'mongoose-paginate-v2';
+
 
 const userSchema = new Schema({
     name: {
@@ -27,4 +29,7 @@ const userSchema = new Schema({
 })
 
 
+userSchema.plugin(paginate); //implementar el metodo paginate en el schema
+
 export const userModel = model('user', userSchema); //userModel seria igual al modelo de mi base de datos.
+
