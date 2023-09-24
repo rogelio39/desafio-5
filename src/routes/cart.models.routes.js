@@ -105,7 +105,7 @@ cartModelsRouter.put('/:cid', async (req, res) => {
         //chequeamos si el carrito existe y almacenamos ese valor en la variable cart
         const cart = await cartModel.findById(cid);
         if (!cart) {
-            return res.status(404).send({ respuesta: 'error al agregar producto al carrito', mensaje: 'Carrito no existe' });
+            res.status(404).send({ respuesta: 'error al agregar producto al carrito', mensaje: 'Carrito no existe' });
         }
 
         const productPromises = products.map(async (prod) => {
@@ -117,7 +117,7 @@ cartModelsRouter.put('/:cid', async (req, res) => {
             if (index != -1) {
                 throw new Error(`Producto ya existente: ${product._id.toString()}`);
             }
-            return {id_prod: product._id};
+            return {id_prod: prod._id, quantity: prod.quantity};
         });
 
         try {
@@ -134,6 +134,55 @@ cartModelsRouter.put('/:cid', async (req, res) => {
         res.status(500).send({ respuesta: 'error al agregar producto al carrito', mensaje: error.message })
     }
 });
+
+
+cartModelsRouter.put('/:cid/product/:pid', async (req, res) => {
+    try {
+        const { cid, pid } = req.params;
+        const { quantity } = req.body;
+
+        //chequeamos si el carrito existe y almacenamos ese valor en la variable cart
+        const cart = await cartModel.findById(cid);
+        if (cart) {
+            //chequeamos si el producto existe
+            const product = await productModel.findById(pid);
+            if(product) {
+                //chequeamos si existe en carrito
+                const index = cart.products.findIndex(cartProd => cartProd.id_prod._id.toString() === pid);
+                if(index != -1){
+                    cart.products[index].quantity = quantity;
+                } else {
+                    res.status(404).send({respuesta : 'error', mensaje: 'error, el producto no existe, no puedes actualizar la cantidad de productos no existentes, agregar el producto a carrito primero'});
+                }
+                const respuesta = await cartModel.findByIdAndUpdate(cid, { products: cart.products });
+                res.status(200).send({respuesta: 'ok', mensaje: `cantidad de producto con id ${product._id} actualizada con exito a ${quantity}`});
+            }
+    } else {
+        res.status(404).send({ respuesta: 'error al agregar producto al carrito', mensaje: 'Carrito no existe' });
+    }
+    } catch (error) {
+        res.status(500).send({ respuesta: 'error al agregar producto al carrito', mensaje: error.message })
+    }
+});
+
+
+
+cartModelsRouter.delete('/:cid', async (req, res) => {
+    try {
+        const { cid } = req.params;
+        const cart = await cartModel.findById(cid)
+        if (cart) {
+            cart.products = [];
+        } else {
+            res.status(404).send({ respuesta: 'error al consultar carrito', mensaje: 'error' });
+        }
+        const respuesta = await cartModel.findByIdAndUpdate(cid, {products : cart.products})
+        res.status(200).send({respuesta: 'ok', mensaje : respuesta});
+    } catch (error) {
+        res.status(500).send({ respuesta: 'error al consultar carrito', mensaje: error })
+    }
+
+})
 
 
 

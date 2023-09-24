@@ -68,7 +68,7 @@ const upload = multer({ storage: storage });
 app.use('/static', express.static(path.join(__dirname, '/public')));
 
 //conectando mongoDB atlas con visual studio code.
-mongoose.connect('mongodb+srv://andresrogesu:Lour1618@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://andresrogesu:password@cluster0.lwz3su9.mongodb.net/?retryWrites=true&w=majority')
 .then( async () => {
     console.log('DB is connected');
     
