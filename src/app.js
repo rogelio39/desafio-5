@@ -120,19 +120,19 @@ io.on('connection', async (socket) => {
 
 
 //routes productos
-app.use('/api/products', prodsRouter);
+app.use('/api/localProducts', prodsRouter);
 
 //routes cart
-app.use('/api/carts', cartRouter);
+app.use('/api/localCarts', cartRouter);
 
 //routes users 
 app.use('/api/users', userRouter);
 
 //routes products con mongo
-app.use('/api/prods', productRouter);
+app.use('/api/products', productRouter);
 
 //routes carts con mongo
-app.use('/api/cartsModels', cartModelsRouter);
+app.use('/api/carts', cartModelsRouter);
 
 
 app.get('/static', async (req, res) => {
