@@ -30,7 +30,7 @@ import cartModelsRouter from "./routes/cart.models.routes.js";
 
 import { userModel } from "./models/users.models.js";
 
-const PORT = 4000;
+const PORT = 8080;
 
 const app = express();
 
